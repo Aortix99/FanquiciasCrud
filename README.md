@@ -122,25 +122,28 @@ Requiere **pasar** `SPRING_DATASOURCE_*` apuntando a una BD que el contenedor pu
 - **Postgres del mismo proyecto en el host** (tras `docker compose up -d db` o con el puerto **5433** mapeado): usa `host.docker.internal` y el puerto del host (**5433**), no `db:5432`.
 - O **Supabase** / cualquier Postgres accesible desde la red del contenedor.
 
-### Requisitos (solo si usas Supabase desde el host)
+### Credenciales de base de datos
 
-- Docker Desktop
-- Acceso a PostgreSQL (Supabase)
+**Postgres (Docker Compose — contenedor `franchises-db`)**
 
-### 1) Configurar variables de entorno
+| Campo | Valor |
+|--------|--------|
+| Host (desde tu PC) | `localhost` |
+| Puerto | `5433` |
+| Base de datos | `franchises` |
+| Usuario | `postgres` |
+| Contraseña | `postgres` |
+| JDBC (red interna Compose, servicio `api` → `db`) | `jdbc:postgresql://db:5432/franchises` |
 
-1. Copia `.env.example` a `.env`.
-2. Completa tus credenciales de Supabase.
+**Supabase (valores por defecto en `application.properties` si no defines variables de entorno)**
 
-Ejemplo:
+| Campo | Valor |
+|--------|--------|
+| URL JDBC | `jdbc:postgresql://db.ohjbrrvnmggowvmxyvkc.supabase.co:5432/postgres?sslmode=require` |
+| Usuario | `postgres` |
+| Contraseña | `1003435599A@a` |
 
-```env
-SPRING_DATASOURCE_URL=jdbc:postgresql://your-supabase-host:5432/postgres?sslmode=require
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=your_password
-```
-
-### 2) Levantar con Docker Compose
+### Levantar con Docker Compose
 
 ```bash
 docker compose up --build
@@ -150,7 +153,7 @@ La API queda disponible en:
 
 `http://localhost:8080`
 
-### 3) Levantar con Docker (sin compose)
+### Levantar con Docker (sin compose)
 
 Build (ejemplo de tag):
 
@@ -171,33 +174,12 @@ docker run --rm -p 8080:8080 `
   franquicias
 ```
 
-Supabase (sin perfil `docker` o con URL propia):
+Supabase (mismos valores que la tabla de credenciales):
 
 ```bash
 docker run --rm -p 8080:8080 `
-  -e SPRING_DATASOURCE_URL="jdbc:postgresql://your-supabase-host:5432/postgres?sslmode=require" `
+  -e SPRING_DATASOURCE_URL="jdbc:postgresql://db.ohjbrrvnmggowvmxyvkc.supabase.co:5432/postgres?sslmode=require" `
   -e SPRING_DATASOURCE_USERNAME=postgres `
-  -e SPRING_DATASOURCE_PASSWORD=your_password `
+  -e SPRING_DATASOURCE_PASSWORD=1003435599A@a `
   franquicias
 ```
-
-> **PowerShell:** comillas y backtick `` ` `` para multilínea. **CMD:** usa `^` en lugar de backtick.
-
-#### Error `Unable to determine Dialect without JDBC metadata`
-
-Suele aparecer cuando **no hay conexión JDBC** (URL incorrecta, `db` sin red Compose, o Postgres apagado). Corrige la URL y el puerto; no basta con solo reconstruir la imagen.
-
-## Notas
-
-- La configuracion de base de datos se resuelve por variables de entorno.
-- No se exponen credenciales reales en el repositorio.
-
-## Plus: Programacion Funcional
-
-La capa de servicios aplica un estilo funcional con:
-
-- DTOs inmutables usando `record`.
-- Transformaciones con `stream().map(...).toList()`.
-- `Optional` donde el API lo amerita (p. ej. `repository.findById(...).orElseThrow(...)`).
-- Composicion `persistir + mapeo` con `Function<T, R>` (`apply` sobre entidades ya cargadas), sin `Optional.of(x)` artificial cuando `x` no es opcional.
-- Funciones reutilizables con `Function<T, R>` para mapear entidad a respuesta.
