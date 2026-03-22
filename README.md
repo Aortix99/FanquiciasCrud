@@ -2,6 +2,84 @@
 
 API backend en Spring Boot para gestionar franquicias, sucursales y productos.
 
+**Base URL (API):** `http://localhost:8080`
+
+## 📬 Endpoints
+
+### Franchises
+
+`POST http://localhost:8080/api/franchises` → Crear franquicia
+
+```json
+{
+  "name": "Franquicia Central",
+  "document": "NIT-900123456"
+}
+```
+
+`POST http://localhost:8080/api/franchises/{franchiseId}/branches` → Agregar sucursal a una franquicia (reemplaza `{franchiseId}` por el id, ej. `1`)
+
+```json
+{
+  "name": "Sucursal Norte"
+}
+```
+
+`PATCH http://localhost:8080/api/franchises/{franchiseId}/name` → Actualizar nombre de la franquicia
+
+```json
+{
+  "name": "Nuevo nombre comercial"
+}
+```
+
+`GET http://localhost:8080/api/franchises/{franchiseId}/top-stock-products-by-branch` → Producto con mayor stock por sucursal (sin cuerpo)
+
+---
+
+### Branches
+
+`POST http://localhost:8080/api/branches/{branchId}/products` → Agregar producto a una sucursal
+
+```json
+{
+  "name": "Producto ejemplo",
+  "stock": 100
+}
+```
+
+`DELETE http://localhost:8080/api/branches/{branchId}/products/{productId}` → Eliminar producto de la sucursal (sin cuerpo)
+
+`PATCH http://localhost:8080/api/branches/{branchId}/name` → Actualizar nombre de la sucursal
+
+```json
+{
+  "name": "Sucursal Centro"
+}
+```
+
+---
+
+### Products
+
+`PATCH http://localhost:8080/api/products/{productId}/stock` → Actualizar stock del producto
+
+```json
+{
+  "stock": 50
+}
+```
+
+`PATCH http://localhost:8080/api/products/{productId}/name` → Actualizar nombre del producto
+
+```json
+{
+  "name": "Producto renombrado"
+}
+```
+
+> Documentacion OpenAPI: [`docs/openapi.yaml`](docs/openapi.yaml) (importar en [Swagger Editor](https://editor.swagger.io/)).
+
 ## Docker (Plus de la prueba)
 
 ### Requisitos
