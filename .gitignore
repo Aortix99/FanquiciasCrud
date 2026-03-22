@@ -1,0 +1,31 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+release.properties
+
+# IDE
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# No subir instaladores, binarios pesados ni archivos personales al repo
+*.exe
+*.msi
+*.dmg
+*.pdf
+*.zip
+*.7z
+
+# Logs / temp
+*.log
+*.tmp
+
+# Variables locales (copia de .env.example)
+.env
