@@ -38,8 +38,9 @@ public class FranchiseService implements FranchiseServiceInterface {
     public FranchiseResponse createFranchise(CreateFranchiseRequest request) {
         Franchise franchise = new Franchise();
         franchise.setName(request.name().trim());
+        franchise.setDocument(request.document().trim());
         Franchise saved = franchiseRepository.save(franchise);
-        return new FranchiseResponse(saved.getId(), saved.getName());
+        return new FranchiseResponse(saved.getId(), saved.getName(), saved.getDocument());
     }
 
     @Transactional
@@ -62,7 +63,7 @@ public class FranchiseService implements FranchiseServiceInterface {
 
         franchise.setName(request.name().trim());
         Franchise saved = franchiseRepository.save(franchise);
-        return new FranchiseResponse(saved.getId(), saved.getName());
+        return new FranchiseResponse(saved.getId(), saved.getName(), saved.getDocument());
     }
 
     @Transactional(readOnly = true)

@@ -18,6 +18,9 @@ public class Franchise extends AuditableEntity {
     @Column(name = "name", nullable = false, length = 120, unique = true)
     private String name;
 
+    @Column(name = "document", nullable = false, length = 20, unique = true)
+    private String document;
+
     @OneToMany(mappedBy = "franchise", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Branch> branches = new ArrayList<>();
 
@@ -30,6 +33,14 @@ public class Franchise extends AuditableEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
+    public void setDocument(String document) {
+        this.document = document;
     }
 
     public List<Branch> getBranches() {
